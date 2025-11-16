@@ -1,69 +1,48 @@
-//package com.fastag.backend_services.controller;
-//
-//import com.fastag.backend_services.Model.User;
-//import com.fastag.backend_services.Repository.UserRepository;
+package com.fastag.backend_services.controller;
+
+import com.fastag.backend_services.Bean.JwtService;
+import com.fastag.backend_services.Service.UserInfoService;
+import com.fastag.backend_services.Config.AuthRequest;
+import com.fastag.backend_services.Model.User;
 //import com.fastag.backend_services.Security.JwtUtils;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.HashMap;
-//import java.util.Map;
-//import java.util.Optional;
-//
-//@RestController
-//@RequestMapping("/api/auth")
-//@CrossOrigin
-//public class AuthController {
-//
-//    @Autowired
-//    private UserRepository userRepository;
-//
-//    @Autowired
-//    private JwtUtils jwtUtils;
-//
-//    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//
-//    @PostMapping("/register")
-//    public Map<String, Object> register(@RequestBody User user) {
-//        Map<String, Object> response = new HashMap<>();
-//
-//        if (userRepository.existsByEmail(user.getEmail())) {
-//            response.put("message", "Email already registered");
-//            return response;
-//        }
-//
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        userRepository.save(user);
-//
-//        response.put("message", "Account created successfully");
-//        return response;
-//    }
-//
-//    @PostMapping("/login")
-//    public Map<String, Object> login(@RequestBody User user) {
-//        Map<String, Object> response = new HashMap<>();
-//        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
-//
-//        if (existingUser.isPresent() &&
-//                passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
-//
-//            String token;
-//            try {
-//                token = jwtUtils.generateToken(user.getEmail());
-//            } catch (Exception e) {
-//                // fallback if JWT generation fails
-//                token = "zUxRzOcl0WZVQEqcMZCJpP4o7zK/74c6LUlDq4TXWZj2S4Wq7y7n1rM2Blq/4TtbmCUwEs2qgEk4gmlR3KjxXg==";
-//                System.err.println("JWT generation failed: " + e.getMessage());
-//            }
-//
-//            response.put("token", token);
-//            response.put("message", "Login successful");
-//        } else {
-//            response.put("message", "Invalid credentials");
-//        }
-//
-//        return response;
-//
-//    }
-//}
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+@CrossOrigin
+public class AuthController {
+
+
+    private UserInfoService service;
+
+    private JwtService jwtService;
+
+    private AuthenticationManager authenticationManager;
+
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "Welcome this endpoint is not secure";
+    }
+
+    @PostMapping("/addNewUser")
+    public String addNewUser(@RequestBody User user) {
+        return service.addUser(user);
+    }
+
+    @PostMapping("/generateToken")
+    public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+        );
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(authRequest.getUsername());
+        } else {
+            throw new UsernameNotFoundException("Invalid user request!");
+        }
+    }
+
+}
