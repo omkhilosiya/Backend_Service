@@ -23,7 +23,7 @@ import java.util.List;
         private String username;
         private String email;
         private String password;
-        private int phone;
+        private String phone;
         private String gender;
         private String entityId;
         private String parentId;

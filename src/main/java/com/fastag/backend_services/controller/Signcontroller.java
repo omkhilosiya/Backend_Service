@@ -1,5 +1,6 @@
 package com.fastag.backend_services.controller;
 
+import com.fastag.backend_services.CommonMethod;
 import com.fastag.backend_services.Model.User;
 import com.fastag.backend_services.Repository.UserRepository;
 import com.fastag.backend_services.component.JwtUtils;
@@ -76,16 +77,20 @@ public class Signcontroller {
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
         String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
-
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        LoginResponse response = new LoginResponse(userDetails.getUsername(), roles, jwtToken);
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        System.out.println("----------------------- This is a User ---------------------");
+        System.out.println(user);
+        System.out.println("----------------------- This is a User ---------------------");
+        LoginResponse response = new LoginResponse(userDetails.getUsername(), roles, jwtToken ,user);
+        System.out.println("----------------------- This is a Response ---------------------");
+        System.out.println(response.getUser());
+        System.out.println("----------------------- This is a Response ---------------------");
         return ResponseEntity.ok(response);
     }
 
@@ -98,54 +103,28 @@ public class Signcontroller {
             map.put("status", false);
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
-        System.out.println("------level 1 --------");
 
-        User user = new User();
-        user.setEmail(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRoles("ROLE_USER");
+        User user = CommonMethod.addAlltheDetails(request,passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
-
-        System.out.println("------level 2 --------");
-
-
-        // Auto login newly created user
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
                 )
         );
-        System.out.println("------level 3 --------");
-
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        System.out.println("------level 4 --------");
-
-
-        // Generate JWT Token
         String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
-
         List<String> roles = userDetails.getAuthorities()
                 .stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
-        System.out.println("------level 6 --------");
-
-
         LoginResponse response = new LoginResponse(
                 userDetails.getUsername(),
                 roles,
                 jwtToken
         );
-
         return ResponseEntity.ok(response);
     }
-
-
 
 }
