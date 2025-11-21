@@ -1,4 +1,4 @@
-package com.fastag.backend_services;
+package com.fastag.backend_services.variables;
 
 import com.fastag.backend_services.Model.User;
 import com.fastag.backend_services.component.SignupRequest;
