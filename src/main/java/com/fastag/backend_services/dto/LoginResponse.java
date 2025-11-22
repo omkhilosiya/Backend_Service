@@ -1,13 +1,12 @@
-package com.fastag.backend_services.component;
+package com.fastag.backend_services.dto;
 
-import com.fastag.backend_services.Model.User;
 import java.util.List;
 
 public class LoginResponse {
     private String jwtToken;
     private String username;
     private List<String> roles;
-    private User user;
+    private DashboardResponse dashboardResponse;
 
 
     public LoginResponse(String username, List<String> roles, String jwtToken) {
@@ -16,11 +15,11 @@ public class LoginResponse {
         this.jwtToken = jwtToken;
     }
 
-    public LoginResponse(String username, List<String> roles, String jwtToken, User user) {
+    public LoginResponse(String username, List<String> roles, String jwtToken, DashboardResponse dashboardResponse) {
         this.username = username;
         this.roles = roles;
         this.jwtToken = jwtToken;
-        this.user = user;
+        this.dashboardResponse = dashboardResponse;
     }
 
     public String getJwtToken() {
@@ -47,11 +46,11 @@ public class LoginResponse {
         this.roles = roles;
     }
 
-    public User getUser() {
-        return user;
+    public DashboardResponse getDashboardResponse() {
+        return dashboardResponse;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(DashboardResponse dashboardResponse) {
+        this.dashboardResponse = dashboardResponse;
     }
 }

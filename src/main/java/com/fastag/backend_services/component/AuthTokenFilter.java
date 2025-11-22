@@ -38,10 +38,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         logger.debug("AuthTokenFilter called for URI: {}", path);
 
         try {
-            // QUICK SKIP: allow unauthenticated access to public endpoints
-            // adjust patterns as needed (exact match or startsWith)
-            if (path.equals("/signup")  || path.startsWith("/auth/")) {
-                logger.debug("Skipping JWT check for public endpoint: {}", path);
+            if (path.startsWith("/signup") || path.startsWith("/signin")) {
                 filterChain.doFilter(request, response);
                 return;
             }

@@ -1,12 +1,14 @@
 package com.fastag.backend_services.controller;
 
-import com.fastag.backend_services.CommonMethod;
 import com.fastag.backend_services.Model.User;
+import com.fastag.backend_services.Model.Wallet;
 import com.fastag.backend_services.Repository.UserRepository;
-import com.fastag.backend_services.component.JwtUtils;
-import com.fastag.backend_services.component.LoginRequest;
-import com.fastag.backend_services.component.LoginResponse;
-import com.fastag.backend_services.component.SignupRequest;
+import com.fastag.backend_services.Repository.WalletRepository;
+import com.fastag.backend_services.component.*;
+import com.fastag.backend_services.dto.DashboardResponse;
+import com.fastag.backend_services.dto.LoginRequest;
+import com.fastag.backend_services.dto.LoginResponse;
+import com.fastag.backend_services.variables.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,6 +37,8 @@ public class Signcontroller {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private WalletRepository walletRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -75,22 +80,17 @@ public class Signcontroller {
             map.put("status", false);
             return new ResponseEntity<Object>(map, HttpStatus.NOT_FOUND);
         }
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
         User user = userRepository.findByUsername(userDetails.getUsername());
-        System.out.println("----------------------- This is a User ---------------------");
-        System.out.println(user);
-        System.out.println("----------------------- This is a User ---------------------");
-        LoginResponse response = new LoginResponse(userDetails.getUsername(), roles, jwtToken ,user);
-        System.out.println("----------------------- This is a Response ---------------------");
-        System.out.println(response.getUser());
-        System.out.println("----------------------- This is a Response ---------------------");
+        Optional<Wallet> walletOpt = walletRepository.findByUserId(user.getId());
+        Wallet wallet = walletOpt.orElse(null);
+        DashboardResponse newDashBoardResponse = CommonMethod.updateTheWallet(wallet);
+            LoginResponse response = new LoginResponse(userDetails.getUsername(), roles, jwtToken ,newDashBoardResponse);
         return ResponseEntity.ok(response);
     }
 
@@ -106,6 +106,9 @@ public class Signcontroller {
 
         User user = CommonMethod.addAlltheDetails(request,passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
+        Wallet wallet = CommonMethod.createTheWallet(user);
+        walletRepository.save(wallet);
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -119,6 +122,9 @@ public class Signcontroller {
                 .stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+
+
+
         LoginResponse response = new LoginResponse(
                 userDetails.getUsername(),
                 roles,

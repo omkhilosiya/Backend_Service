@@ -4,12 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
     @Data
@@ -19,8 +22,10 @@ import java.util.List;
     public class User implements UserDetails {
         @Id
         private String id;
+        private String userId;
         private String name;
         private String username;
+        private boolean status;
         private String email;
         private String password;
         private String phone;
@@ -29,9 +34,13 @@ import java.util.List;
         private String parentId;
         private String profileImage;
         private String roles;
+        private LocalDateTime createdDate;
         private List<String> permissions;
         private List<String> serviceAccess;
         private ServicePrices servicePrices;
+
+        @DBRef
+        private Wallet wallet;
 
 
         public User(String email, String password, String roles) {
@@ -73,4 +82,5 @@ import java.util.List;
         public boolean isEnabled() {
             return UserDetails.super.isEnabled();
         }
+
     }
