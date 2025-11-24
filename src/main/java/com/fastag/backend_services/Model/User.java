@@ -26,6 +26,7 @@ import java.util.List;
         private String name;
         private String username;
         private boolean status;
+        private int age;
         private String email;
         private String password;
         private String phone;
