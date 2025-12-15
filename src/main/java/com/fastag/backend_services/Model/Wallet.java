@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Document(collection = "wallets")
+@Document(collection = "wallet")
 public class Wallet {
     @Id
     private String id;

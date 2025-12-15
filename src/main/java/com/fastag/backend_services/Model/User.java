@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
     @Data
-    @Document(collection = "hahaha")
+    @Document(collection = "user")
     @AllArgsConstructor
     @NoArgsConstructor
     public class User implements UserDetails {
@@ -43,21 +43,16 @@ import java.util.List;
         @DBRef
         private Wallet wallet;
 
-
         public User(String email, String password, String roles) {
             this.email = email;
             this.password = password ;
             this.roles = roles;
         }
 
-
-
-
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
             return List.of(new SimpleGrantedAuthority(this.roles));
         }
-
 
         @Override
         public String getUsername() {

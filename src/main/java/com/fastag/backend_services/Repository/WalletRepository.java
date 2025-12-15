@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface WalletRepository extends MongoRepository<Wallet, String> {
     Optional<Wallet> findByUserId(String userId);
-    // find wallet by same userId string
-    // get all wallets
+
     List<Wallet> findAll();
 }

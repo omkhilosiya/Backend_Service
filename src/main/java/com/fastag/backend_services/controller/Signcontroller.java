@@ -1,5 +1,6 @@
 package com.fastag.backend_services.controller;
 
+import com.fastag.backend_services.GlobalExceptionHandler.UserAlreadyExistsException;
 import com.fastag.backend_services.Model.User;
 import com.fastag.backend_services.Model.Wallet;
 import com.fastag.backend_services.Repository.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -70,38 +72,48 @@ public class Signcontroller {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication;
-        try {
-            authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        } catch (AuthenticationException exception) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("message", "Bad credentials");
-            map.put("status", false);
-            return new ResponseEntity<Object>(map, HttpStatus.NOT_FOUND);
-        }
+        System.out.println("----step 1----- achieved ----------");
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        System.out.println("----step 2 ----- achieved ----------");
         String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
         List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        User user = userRepository.findByUsername(userDetails.getUsername());
-        Optional<Wallet> walletOpt = walletRepository.findByUserId(user.getId());
-        Wallet wallet = walletOpt.orElse(null);
-        DashboardResponse newDashBoardResponse = CommonMethod.updateTheWallet(wallet);
-            LoginResponse response = new LoginResponse(userDetails.getUsername(), roles, jwtToken ,newDashBoardResponse);
+        User userOpt = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        System.out.println("----step 3 ----- achieved ----------");
+        Wallet wallet = walletRepository
+                .findByUserId(userOpt.getUserId())
+                .orElse(null);
+        DashboardResponse newDashboardResponse =
+                CommonMethod.updateTheWallet(wallet);
+        System.out.println("----step 4 ----- achieved ----------");
+        if (!userOpt.isStatus()) {
+            userOpt.setStatus(true);
+            userRepository.save(userOpt);
+        }
+        LoginResponse response = new LoginResponse(
+                userDetails.getUsername(),
+                roles,
+                jwtToken,
+                newDashboardResponse
+        );
+
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest request) {
 
-        if (userRepository.existsByUsername(request.getUsername())) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("message", "Username already exists!");
-            map.put("status", false);
-            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new UserAlreadyExistsException("Username already exists");
         }
 
         User user = CommonMethod.addAlltheDetails(request,passwordEncoder.encode(request.getPassword()));
@@ -111,10 +123,11 @@ public class Signcontroller {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
+                        request.getEmail(),
                         request.getPassword()
                 )
         );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
@@ -122,8 +135,6 @@ public class Signcontroller {
                 .stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
-
 
         LoginResponse response = new LoginResponse(
                 userDetails.getUsername(),
