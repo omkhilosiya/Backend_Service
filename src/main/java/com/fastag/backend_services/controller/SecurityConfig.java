@@ -36,7 +36,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests.requestMatchers("/signup", "/signin").permitAll()
+                authorizeRequests.requestMatchers("/signup", "/signin" , "/swagger-ui/**" , "/v3/api-docs/**" , "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated());
         http.sessionManagement(
                 session ->
@@ -67,4 +67,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
         return builder.getAuthenticationManager();
     }
+
+
 }

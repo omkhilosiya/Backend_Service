@@ -20,13 +20,25 @@ import java.io.IOException;
 
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
+
     @Autowired
     private JwtUtils jwtUtils;
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(AuthTokenFilter.class);
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+
+        return path.startsWith("/signup")
+                || path.startsWith("/signin")
+                || path.startsWith("/swagger-ui")
+                || path.startsWith("/v3/api-docs");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -34,45 +46,44 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String path = request.getRequestURI();
-        logger.debug("AuthTokenFilter called for URI: {}", path);
-
         try {
-            if (path.startsWith("/signup") || path.startsWith("/signin")) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
             String jwt = parseJwt(request);
+
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
-                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+                UserDetails userDetails =
+                        customUserDetailsService.loadUserByUsername(username);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
-                                userDetails.getAuthorities());
+                                userDetails.getAuthorities()
+                        );
 
-                logger.debug("Roles from JWT for {} : {}", username, userDetails.getAuthorities());
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource()
+                                .buildDetails(request)
+                );
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder
+                        .getContext()
+                        .setAuthentication(authentication);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                logger.debug("No valid JWT found in request for URI: {}", path);
+                logger.debug("Authenticated user: {}", username);
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e.getMessage(), e);
+            logger.error("JWT authentication failed", e);
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String jwt = jwtUtils.getJwtFromHeader(request);
-        logger.debug("AuthTokenFilter.java: {}", jwt);
-        return jwt;
+        return jwtUtils.getJwtFromHeader(request);
     }
 }
+
+
