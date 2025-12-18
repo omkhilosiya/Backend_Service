@@ -2,7 +2,6 @@ package com.fastag.backend_services.controller;
 
 import com.fastag.backend_services.Model.User;
 import com.fastag.backend_services.Repository.UserRepository;
-import com.fastag.backend_services.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
