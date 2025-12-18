@@ -10,6 +10,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.fastag.backend_services.variables.Variables.*;
+
 @Service
 public class VehicleService {
 
@@ -20,23 +22,17 @@ public class VehicleService {
     }
 
     public String getVehicleByChassis(String chassisNumber) {
-        String url = "https://api.invincibleocean.com/invincible/vehicleByChassisLive";
 
         // Prepare headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("clientId", "YOUR_CLIENT_ID");  // Replace with actual clientId
-        headers.set("secretKey", "YOUR_SECRET_KEY"); // Replace with actual secretKey
+        headers.set("clientId", CLIENT_ID);
+        headers.set("secretKey", SECRET_KEY);
 
-        // Prepare body
         Map<String, String> body = new HashMap<>();
         body.put("chassisNumber", chassisNumber);
-
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(body, headers);
-
-        // Send POST request
-        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-
+        ResponseEntity<String> response = restTemplate.postForEntity(REVERSE_RC, entity, String.class);
         return response.getBody();
     }
 }

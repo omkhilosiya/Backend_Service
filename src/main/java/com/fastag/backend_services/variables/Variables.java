@@ -34,4 +34,6 @@ public class Variables {
         };
 
     public static final URI INVINCIBLE_RC_URL = URI.create("https://api.invincibleocean.com/invincible/vehicleRcV6");
+    public static final URI REVERSE_RC = URI.create("https://api.invincibleocean.com/invincible/vehicleByChassisLive");
+
 }
