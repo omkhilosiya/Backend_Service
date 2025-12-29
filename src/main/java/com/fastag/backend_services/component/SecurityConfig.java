@@ -75,7 +75,8 @@ public class SecurityConfig {
         org.springframework.web.cors.CorsConfiguration config =
                 new org.springframework.web.cors.CorsConfiguration();
 
-        config.setAllowedOrigins(java.util.List.of("https://omjainkhilosiya.info"));
+//        config.setAllowedOrigins(java.util.List.of("https://omjainkhilosiya.info"));
+        config.setAllowedOrigins(java.util.List.of("https://front-end-service-git-main-om-jains-projects-e7bf1697.vercel.app"));
         config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(java.util.List.of("*"));
         config.setAllowCredentials(true);
