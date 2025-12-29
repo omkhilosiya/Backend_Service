@@ -6,4 +6,5 @@ import lombok.Data;
 public class WalletBalanceRequest {
     private String userId;
     private Double amount;
+    private String note;
 }

@@ -17,28 +17,32 @@ public class AdminController {
     @Autowired
     private UserWalletService userWalletService;
 
+    // THIS METHOD IS ALSO GIVEN TO ADMIN , WHERE INTIALLY ADDING THE BALANCE THOSE DETAILS WILL POP UP OF THE SUBAGENT
     @GetMapping("/subagents")
     public List<SubAgentWalletDTO> getSubAgents() {
         return userWalletService.getSubAgentsWithBalance();
     }
 
+
+    // ADDING THE BALANCE USING TRANSTIONAL METHOD
     @PostMapping("/add-balance")
     public ResponseEntity<?> addBalance(@RequestBody WalletBalanceRequest request) {
 
         Wallet updatedWallet = userWalletService.addBalance(
                 request.getUserId(),
-                request.getAmount()
+                request.getAmount(),
+                request.getNote()
         );
 
         return ResponseEntity.ok(
                 Map.of(
                         "message", "Balance added successfully",
                         "userId", updatedWallet.getUserId(),
-                        "balance", updatedWallet.getBalance()
+                        "balance", updatedWallet.getBalance(),
+                        "transactions", updatedWallet.getTransactions()
                 )
         );
     }
-
 
 
 }

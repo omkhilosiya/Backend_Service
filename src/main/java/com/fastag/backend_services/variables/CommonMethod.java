@@ -27,7 +27,7 @@ public class CommonMethod {
         UpdatedUser.setParentId(generateUserId());
         UpdatedUser.setCreatedDate(LocalDateTime.now());
         UpdatedUser.setPassword(Password);
-        UpdatedUser.setRoles("ROLE_USER");
+        UpdatedUser.setRoles(Variables.SUB_AGENT);
         UpdatedUser.setUsername(user.getUsername());
         UpdatedUser.setGender("Male");
         UpdatedUser.setStatus(false);

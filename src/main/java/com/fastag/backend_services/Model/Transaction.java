@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class Transaction {
-    private Breakdown breakdown;
     private String type;
     private double amount;
     private String reason;

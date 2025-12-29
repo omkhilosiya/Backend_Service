@@ -1,10 +1,7 @@
-package com.fastag.backend_services.controller;
+package com.fastag.backend_services.component;
 
 
-import com.fastag.backend_services.component.AuthEntryPointJwt;
-import com.fastag.backend_services.component.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 //import javax.sql.DataSource;
+
 
 @Configuration
 @EnableWebSecurity
@@ -35,8 +33,11 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+
+        http
+                .cors(cors -> {});
         http.authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests.requestMatchers("/signup", "/signin" , "/swagger-ui/**" , "/v3/api-docs/**" , "/swagger-ui.html").permitAll()
+                authorizeRequests.requestMatchers("/signup", "/logout", "/signin" , "/swagger-ui/**" , "/v3/api-docs/**" , "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated());
         http.sessionManagement(
                 session ->
@@ -66,6 +67,24 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
         return builder.getAuthenticationManager();
+    }
+
+    @Bean
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+
+        org.springframework.web.cors.CorsConfiguration config =
+                new org.springframework.web.cors.CorsConfiguration();
+
+        config.setAllowedOrigins(java.util.List.of("http://localhost:3000"));
+        config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(java.util.List.of("*"));
+        config.setAllowCredentials(true);
+
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
+                new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
 

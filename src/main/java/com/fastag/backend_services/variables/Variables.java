@@ -17,7 +17,8 @@ public class Variables {
         public static final String Currency_Type = "INR";
         public static final String SUB_AGENT = "SUBAGENT";
         public static final String AGENT = "AGENT";
-        public static final double Set_Intial_Balance = 0;
+        public static final String ADMIN = "ADMIN";
+    public static final double Set_Intial_Balance = 0;
         public static final String[] Permissions = new String[] {
                 "sub-agent-management",
                 "services",
