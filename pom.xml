@@ -54,12 +54,21 @@
             <artifactId>lombok</artifactId>
             <version>1.18.42</version>
         </dependency>
-        <!--
- Source - https://stackoverflow.com/a
- Posted by alia, modified by community. See post 'Timeline' for change history
- Retrieved 2025-11-16, License - CC BY-SA 4.0
- -->
-
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-core</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-pdfbox</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-slf4j</artifactId>
+            <version>1.0.10</version>
+        </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>

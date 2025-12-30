@@ -1,0 +1,193 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+
+        @page { size: A4; margin: 15mm; }
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+
+        .wrapper{
+            border: 2px solid #000;
+            padding: 10px;
+        }
+
+        .header-title{
+            text-align:center;
+            font-size: 18px;
+            font-weight:bold;
+        }
+
+        .sub-title{
+            text-align:center;
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+
+        .emblem{
+            width:110px;
+        }
+
+        .section-title{
+            width:100%;
+            text-align:center;
+            font-size: 14px;
+            font-weight:bold;
+            border-top:2px solid #000;
+            border-bottom:2px solid #000;
+            padding:6px 0;
+            margin-top:8px;
+            margin-bottom:6px;
+        }
+
+        .table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        .table td{
+            padding:4px 0;
+            vertical-align:top;
+        }
+
+        .left-col{ width:50%; }
+        .right-col{ width:50%; }
+
+        .bottom-area{
+            width:100%;
+            margin-top:12px;
+        }
+
+        .sign-box{
+            border:1px solid #000;
+            width:230px;
+            padding:6px;
+            font-size:10px;
+            float:right;
+        }
+
+        .sign-img{
+            width:120px;
+            margin-top:6px;
+        }
+
+        .verified{
+            width:140px;
+            float:right;
+            margin-top:10px;
+        }
+
+        .note{
+            border:1px solid #000;
+            padding:6px;
+            font-size:10px;
+            margin-top:6px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <table width="100%">
+        <tr>
+            <td width="20%">
+                <img src="rc/satyamehvajaydev.png" class="emblem"/>
+            </td>
+            <td width="80%">
+                <div class="header-title">Registration Certificate of Vehicle</div>
+                <div class="sub-title">Issuing Authority: {{regAuthority}}</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="section-title">Registration Details</div>
+
+    <table class="table">
+        <tr>
+            <td class="left-col">
+                <b>Registration Number :</b> {{regNo}}<br/>
+                <b>Vehicle Class :</b> {{class}}<br/>
+                <b>Fuel Type :</b> {{type}}<br/>
+                <b>Chassis Number :</b> {{chassis}}<br/>
+                <b>Mon/Year of Mfg :</b> {{vehicleManufacturingMonthYear}}<br/>
+                <b>Owner Name :</b> {{owner}}<br/>
+                <b>Present Address :</b> {{presentAddress}}<br/>
+                <b>Name of Financer :</b> {{rcFinancer}}<br/>
+                <b>Tax Upto :</b> {{vehicleTaxUpto}}
+            </td>
+
+            <td class="right-col">
+                <b>Registration Date :</b> {{regDate}}<br/>
+                <b>Vehicle Model :</b> {{model}}<br/>
+                <b>Vehicle Colour :</b> {{vehicleColour}}<br/>
+                <b>Engine Number :</b> {{engine}}<br/>
+                <b>Cubic Capacity :</b> {{vehicleCubicCapacity}}<br/>
+                <b>S/W/D Name :</b> {{ownerFatherName}}<br/>
+                <b>Permanent Address :</b> {{permanentAddress}}<br/>
+                <b>RC Status :</b> {{status}}<br/>
+                <b>Owner SNO :</b> {{ownerCount}}
+            </td>
+        </tr>
+    </table>
+
+    <div class="section-title">Insurance Details</div>
+
+    <table class="table">
+        <tr>
+            <td><b>Insurance Company :</b> {{vehicleInsuranceCompanyName}}</td>
+            <td><b>Valid upto :</b> {{vehicleInsuranceUpto}}</td>
+        </tr>
+        <tr>
+            <td><b>Policy Number :</b> {{vehicleInsurancePolicyNumber}}</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <div class="section-title">PUC Certificate</div>
+
+    <table class="table">
+        <tr>
+            <td><b>Certificate Number :</b> {{puccNumber}}</td>
+            <td><b>Valid upto :</b> {{puccUpto}}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">Fitness Certificate</div>
+
+    <b>Valid upto :</b> {{rcExpiryDate}}
+
+    <div class="bottom-area">
+
+        <div class="sign-box">
+            Digitally signed by<br/>
+            Ministry of Road<br/>
+            Transport And Highways<br/>
+            Government of India<br/>
+            Date: {{regDate}}
+            <br/><br/>
+            <img src="rc/sign.png" class="sign-img"/>
+        </div>
+
+        <img src="rc/verified.png" class="verified"/>
+
+    </div>
+
+    <div style="clear:both;"></div>
+
+    <div class="note">
+        <b>Note:</b><br/>
+        1. This is a digital certificate. The format of this certificate may differ from document issued by the concerned department.<br/>
+        2. The data displayed in this certificate is taken from the official database of the concerned authority.<br/>
+        3. This digitally signed document is legally valid as per the IT Act 2000 when used electronically.<br/>
+    </div>
+
+</div>
+
+</body>
+</html>
