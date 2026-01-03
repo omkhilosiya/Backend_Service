@@ -1,9 +1,13 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8"/>
-    <style>
 
-        @page { size: A4; margin: 15mm; }
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm 10mm 15mm 10mm;
+        }
 
         body{
             font-family: Arial, Helvetica, sans-serif;
@@ -12,34 +16,30 @@
 
         .wrapper{
             border: 2px solid #000;
-            padding: 10px;
+            padding: 8px;
         }
 
         .header-title{
             text-align:center;
-            font-size: 18px;
+            font-size: 22px;
             font-weight:bold;
         }
 
         .sub-title{
             text-align:center;
-            font-size: 11px;
+            font-size: 12px;
             margin-bottom: 6px;
-        }
-
-        .emblem{
-            width:110px;
         }
 
         .section-title{
             width:100%;
             text-align:center;
-            font-size: 14px;
+            font-size: 15px;
             font-weight:bold;
             border-top:2px solid #000;
             border-bottom:2px solid #000;
             padding:6px 0;
-            margin-top:8px;
+            margin-top:10px;
             margin-bottom:6px;
         }
 
@@ -49,24 +49,25 @@
         }
 
         .table td{
-            padding:4px 0;
+            padding:3px 0;
             vertical-align:top;
         }
 
-        .left-col{ width:50%; }
-        .right-col{ width:50%; }
-
-        .bottom-area{
-            width:100%;
-            margin-top:12px;
+        .qr-img{
+            width:150px;
+            height:150px;
         }
 
-        .sign-box{
-            border:1px solid #000;
-            width:230px;
-            padding:6px;
+        .verified{
+            width:140px;
+        }
+
+        .sign-block{
+            width:260px;
             font-size:10px;
-            float:right;
+            border:1px solid #000;
+            padding:8px;
+            text-align:center;
         }
 
         .sign-img{
@@ -74,55 +75,58 @@
             margin-top:6px;
         }
 
-        .verified{
-            width:140px;
-            float:right;
-            margin-top:10px;
-        }
-
         .note{
             border:1px solid #000;
             padding:6px;
             font-size:10px;
-            margin-top:6px;
+            margin-top:10px;
         }
 
     </style>
+
 </head>
 
 <body>
 
 <div class="wrapper">
 
+    <!-- HEADER -->
     <table width="100%">
         <tr>
-            <td width="20%">
-                <img src="rc/satyamehvajaydev.png" class="emblem"/>
+            <td width="18%">
+                <img src="rc/satyamehvajaydev.png" width="85"/>
             </td>
-            <td width="80%">
-                <div class="header-title">Registration Certificate of Vehicle</div>
-                <div class="sub-title">Issuing Authority: {{regAuthority}}</div>
+
+            <td width="82%">
+                <div class="header-title">
+                    Registration Certificate of Vehicle
+                </div>
+
+                <div class="sub-title">
+                    Issuing Authority: {{regAuthority}}
+                </div>
             </td>
         </tr>
     </table>
 
+    <!-- REGISTRATION -->
     <div class="section-title">Registration Details</div>
 
     <table class="table">
         <tr>
-            <td class="left-col">
+            <td width="50%">
                 <b>Registration Number :</b> {{regNo}}<br/>
-                <b>Vehicle Class :</b> {{class}}<br/>
-                <b>Fuel Type :</b> {{type}}<br/>
+                <b>Vehicle Class :</b> {{vehicleClass}}<br/>
+                <b>Fuel Type :</b> {{fuelType}}<br/>
                 <b>Chassis Number :</b> {{chassis}}<br/>
                 <b>Mon/Year of Mfg :</b> {{vehicleManufacturingMonthYear}}<br/>
                 <b>Owner Name :</b> {{owner}}<br/>
                 <b>Present Address :</b> {{presentAddress}}<br/>
                 <b>Name of Financer :</b> {{rcFinancer}}<br/>
-                <b>Tax Upto :</b> {{vehicleTaxUpto}}
+                <b>Tax Up to :</b> {{vehicleTaxUpto}}<br/>
             </td>
 
-            <td class="right-col">
+            <td width="50%">
                 <b>Registration Date :</b> {{regDate}}<br/>
                 <b>Vehicle Model :</b> {{model}}<br/>
                 <b>Vehicle Colour :</b> {{vehicleColour}}<br/>
@@ -131,11 +135,12 @@
                 <b>S/W/D Name :</b> {{ownerFatherName}}<br/>
                 <b>Permanent Address :</b> {{permanentAddress}}<br/>
                 <b>RC Status :</b> {{status}}<br/>
-                <b>Owner SNO :</b> {{ownerCount}}
+                <b>Owner Sno :</b> {{ownerCount}}<br/>
             </td>
         </tr>
     </table>
 
+    <!-- INSURANCE -->
     <div class="section-title">Insurance Details</div>
 
     <table class="table">
@@ -149,6 +154,7 @@
         </tr>
     </table>
 
+    <!-- PUC -->
     <div class="section-title">PUC Certificate</div>
 
     <table class="table">
@@ -158,33 +164,40 @@
         </tr>
     </table>
 
+    <!-- FITNESS -->
     <div class="section-title">Fitness Certificate</div>
 
     <b>Valid upto :</b> {{rcExpiryDate}}
 
-    <div class="bottom-area">
+    <!-- QR + SIGN -->
+    <!-- QR + VERIFIED + SIGN -->
+    <table width="100%">
+        <tr>
 
-        <div class="sign-box">
-            Digitally signed by<br/>
-            Ministry of Road<br/>
-            Transport And Highways<br/>
-            Government of India<br/>
-            Date: {{regDate}}
-            <br/><br/>
-            <img src="rc/sign.png" class="sign-img"/>
-        </div>
+            <!-- QR LEFT -->
+            <td width="33%" align="center" valign="middle">
+                <img src="{{QR_CODE}}" width="150" height="150"/>
+            </td>
 
-        <img src="rc/verified.png" class="verified"/>
+            <!-- VERIFIED CENTER -->
+            <td width="33%" align="center" valign="middle">
+                <img src="rc/verified.png" width="140"/>
+            </td>
 
-    </div>
+            <!-- SIGN RIGHT -->
+            <td width="33%" align="center" valign="middle">
+                <img src="rc/sign.png" width="120"/>
+            </td>
 
-    <div style="clear:both;"></div>
+        </tr>
+    </table>
 
+    <!-- NOTE -->
     <div class="note">
         <b>Note:</b><br/>
-        1. This is a digital certificate. The format of this certificate may differ from document issued by the concerned department.<br/>
-        2. The data displayed in this certificate is taken from the official database of the concerned authority.<br/>
-        3. This digitally signed document is legally valid as per the IT Act 2000 when used electronically.<br/>
+        1. This is a digital certificate. The format of this certificate may differ.<br/>
+        2. Data is fetched from official RTO records.<br/>
+        3. This digitally signed document is legally valid as per IT Act 2000.<br/>
     </div>
 
 </div>

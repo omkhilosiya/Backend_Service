@@ -76,7 +76,7 @@ public class SecurityConfig {
                 new org.springframework.web.cors.CorsConfiguration();
 
         config.setAllowedOriginPatterns(java.util.List.of(
-                "https://omjainkhilosiya.info",
+                "http://localhost:3000",
                 "https://www.omjainkhilosiya.info"
         ));
 

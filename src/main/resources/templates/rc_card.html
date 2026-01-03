@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>RC Smart Card</title>
+
+    <style>
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+
+        .card{
+            border: 2px solid #9FC8E6;
+            width: 100%;
+            position: relative;
+        }
+
+        /******** HEADER ********/
+        .header{
+            background: linear-gradient(#d8ecfc,#eff8ff);
+            border-bottom: 2px solid #9FC8E6;
+            padding: 12px;
+        }
+
+        .header-table{
+            width:100%;
+        }
+        .header-table td{
+            vertical-align: top;
+        }
+
+        .title1{ font-size: 14px; font-weight: bold;}
+        .title2{ font-size: 12px;}
+
+        .badges{ text-align:right;}
+        .badge{
+            width:32px;
+            height:32px;
+            display:inline-block;
+            border-radius:50%;
+            border:2px solid #ffb400;
+            text-align:center;
+            font-weight:bold;
+            line-height:29px;
+            margin-left:5px;
+        }
+
+        /******** MAIN ********/
+        .body{ padding:10px;}
+
+        .table-info{ width:100%; }
+
+        .label{ font-weight:bold; }
+
+        /******** LIGHT BLUE BAR ********/
+        .section-bar{
+            background:#E5F4FF;
+            border-top:2px solid #9FC8E6;
+            border-bottom:2px solid #9FC8E6;
+            padding:6px 10px;
+            font-weight:bold;
+        }
+
+        /******** LOWER ********/
+        .lower{ padding:10px;}
+
+        .lower-table{
+            width:100%;
+            border-top:2px solid #000;
+        }
+
+        .lower-table td{ vertical-align:top;}
+        .qr-box{
+            border-right:1px solid #000;
+            padding-right:10px;
+        }
+
+        /******** FOOTER ********/
+        .footer{
+            margin-top:10px;
+            text-align:right;
+            font-size:12px;
+        }
+
+        .vert-text{
+            writing-mode: vertical-rl;
+            position:absolute;
+            right:5px;
+            top:140px;
+            font-size:11px;
+            color:#444;
+        }
+
+        .formText{
+            position:absolute;
+            right:5px;
+            bottom:120px;
+            font-size:11px;
+            transform: rotate(180deg);
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="header">
+        <table class="header-table">
+            <tr>
+                <td>
+                    <div class="title1">Indian Union Vehicle Registration Certificate</div>
+                    <div class="title2">Issued by {{regAuthority}}</div>
+                </td>
+                <td class="badges">
+                    <span class="badge">T</span>
+                    <span class="badge">RJ</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="body">
+
+        <table class="table-info">
+            <tr>
+
+                <td width="50%">
+                    <b>Regn No:</b> {{regNo}}<br/>
+                    <b>Chassis No:</b> {{chassis}}<br/>
+                    <b>Engine No:</b> {{engine}}<br/>
+                    <b>Owner Name:</b> {{owner}}<br/>
+                    <b>Address:</b> {{presentAddress}}<br/>
+                </td>
+
+                <td width="50%">
+                    <b>Date of Regn:</b> {{regDate}}<br/>
+                    <b>Regn Validity:</b> {{rcExpiryDate}}<br/>
+                    <b>Owner Serial:</b> {{ownerCount}}<br/><br/>
+                    <b>Fuel:</b> {{type}}<br/>
+                    <b>Emission Norms:</b> {{normsType}}<br/>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+
+    <div class="section-bar">
+        Vehicle Class: {{vehicleCategory}}
+    </div>
+
+    <div class="lower">
+
+        <table class="lower-table">
+            <tr>
+
+                <td width="40%" class="qr-box">
+                    <b>Regn. Number</b><br/>
+                    {{regNo}}
+                    <br/><br/>
+                    <img src="{{QR_CODE}}" width="140"/>
+                    <br/><br/>
+
+                    <b>Month-Year of Mfg:</b> {{vehicleManufacturingMonthYear}}<br/>
+                    <b>No of Cylinders:</b> {{vehicleCylindersNo}}<br/>
+                    <b>No of Axle:</b> -<br/>
+                </td>
+
+                <td width="60%">
+                    <b>Maker:</b> {{vehicleManufacturerName}}<br/>
+                    <b>Model:</b> {{model}}<br/>
+                    <b>Body Type:</b> {{bodyType}}<br/>
+                    <b>Unladen / Laden:</b> {{unladenWeight}} / {{grossVehicleWeight}}<br/>
+                    <b>Horse Power:</b> {{horsePower}}<br/>
+                    <b>Wheel Base:</b> {{wheelbase}}<br/>
+                    <b>Financier:</b> {{rcFinancer}}<br/>
+                </td>
+
+            </tr>
+        </table>
+
+        <div class="footer">
+            <b>Registration Authority</b><br/>
+            {{regAuthority}}
+        </div>
+
+    </div>
+
+    <div class="vert-text">
+        Card Issue Date ({{statusAsOn}})
+    </div>
+</div>
+
+</body>
+</html>
